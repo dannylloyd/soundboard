@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Soundboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- JavaScript -->
+    <script>
+        var currentlyPlaying;
+        var asdf;
+        $(function () {
+            $('#btnStop').click(function () {
+                stopAll();
+                ShowPlay();
+            });
+            $("audio").each(function (i, audioElement) {
+                var audio = $(this);
+                var that = this; //closure to keep reference to current audio tag
+                audio.on('ended', function () {
+                    ShowPlay();
+                    currentlyPlaying = asdf;
+                });
+                $("#doc").append($('<button class="btn btn-lg btn-default">' + audio.attr("title") + '</button>').click(function (e) {
+                    e.preventDefault();
+                    ShowStop();
+                    if (currentlyPlaying !== asdf)
+                        currentlyPlaying.pause(); //stops the current track playing in favor of the just clicked one
+                    currentlyPlaying = that; //sets the current track so that it can be stopped later if needed
+                    that.currentTime = 0; //resets the current track if the same sound is played, it restarts it
+                    that.play();
+                }));
+            });
+        });
+        function stopAll() {
+            $("audio").each(function (i, audioElement) {
+                this.pause();
+            });
+        }
+        function ShowStop() {
+            $('#currentAction').addClass('fa-cog fa-spin').removeClass('fa-play');
+        }
+        function ShowPlay() {
+            $('#currentAction').removeClass('fa-cog fa-spin').addClass('fa-play');
+        }
+    </script>
+    <style type="text/css">
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="doc" class="container">
+        <h1>Soundboard</h1>
+        <button class="btn btn-danger btn-lg" id="btnStop" title="Stop All"><span id="currentAction" class="fa fa-play"></span></button>
+        <audio src="sounds/screaming_goat.mp3" preload="auto" title="Screaming Goat"></audio>
+        <audio src="sounds/anchorman_human_torch_denied_bankloan.mp3" preload="auto" title="Anchroman Human Torch"></audio>
+        <audio src="sounds/anchorman_milk_bad_choice.mp3" preload="auto" title="Anchroman Milk Bad Choice"></audio>
+        <audio src="sounds/anchroman_battlerules.mp3" preload="auto" title="Anchroman Battle Rules"></audio>
+        <audio src="sounds/ron_burgundy_scotch.mp3" preload="auto" title="Anchorman Scotch"></audio>
+        <audio src="sounds/TacomaAroma_Chris.mp3" preload="auto" title="Chris!!!!"></audio>
+        <audio src="sounds/TacomaAroma_fraud.mp3" preload="auto" title="I'm a fraud"></audio>
+        <audio src="sounds/People_Boos_long.mp3" preload="auto" title="Boos (long)"></audio>
+        <audio src="sounds/People_clapping.mp3" preload="auto" title="Applause"></audio>
+    </div>
+
+</body>
+</html>
